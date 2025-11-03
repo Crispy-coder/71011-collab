@@ -1,0 +1,139 @@
+document
+ 
+/* 1. Namespaces */
+prefix ex <http://example.com/teal-survey/>
+prefix prov <http://www.w3.org/ns/prov#>
+prefix s <http://schema.org/>
+ 
+/* 2. Agents */
+agent(ex:TealTeam, [prov:type="prov:Organization", prov:label="Teal Team"])
+agent(ex:SurveyRespondents, [prov:type="prov:Collection", prov:label="Survey Respondents"])
+ 
+agent(ex:Alice, [prov:type="ex:TeamMember", prov:label="Alice"])
+agent(ex:Brian, [prov:type="ex:TeamMember", prov:label="Brian"])
+agent(ex:Carl, [prov:type="ex:TeamMember", prov:label="Carl"])
+agent(ex:David, [prov:type="ex:TeamMember", prov:label="David"])
+ 
+agent(ex:Tutors, [prov:type="prov:Organization", prov:label="Tutors"])
+agent(ex:Excel, [prov:type="ex:Tool", prov:label="Excel"])
+agent(ex:Qualtrics, [prov:type="ex:Platform", prov:label="Qualtrics"])
+agent(ex:PowerPoint, [prov:type="ex:Platform", prov:label="PowerPoint"])
+ 
+/* 3. Entities */
+entity(ex:Topic, [prov:label="Cycle to Work"])
+ 
+entity(ex:Internet, [
+    prov:type="prov:Collection",
+    ex:source1="https://www.gov.uk/government/publications/cycle-to-work-scheme-implementation-guidance",
+    ex:source2="https://www.cyclescheme.co.uk/"
+])
+ 
+
+entity(ex:SurveyDraft)
+entity(ex:FinalSurvey)
+entity(ex:SurveyResponse)
+entity(ex:RawData)
+entity(ex:Documentation)
+entity(ex:Metadata)
+entity(ex:Attributes)
+entity(ex:CleanedData)
+ 
+entity(ex:StandardisedData, [
+    ex:variable1="Income",
+    ex:variable2="Distance Travelled",
+    ex:variable3="Work Model"
+])
+ 
+entity(ex:BasicIndex)
+entity(ex:FinalIndex)
+entity(ex:Presentation)
+entity(ex:BasicPROVDiagram)
+ 
+/* 4. Activities */
+activity(ex:Research)
+activity(ex:SurveyDiscussion)
+activity(ex:PlayGovRole)
+activity(ex:PostingUploading)
+activity(ex:CreateDocumentation)
+activity(ex:UserPersonas)
+activity(ex:CompleteSurvey)
+activity(ex:PreprocessData)
+activity(ex:ResearchIndexIndicators)
+activity(ex:IndexDiscussion)
+activity(ex:DataStandardisation)
+activity(ex:CreateIndexFormula)
+activity(ex:CreatePresentation)
+activity(ex:CreateBasicPROVDiagram)
+ 
+/* 5. Relations */
+ 
+/* 5.1 Responsibility */
+wasAttributedTo(ex:Topic, ex:Tutors)
+actedOnBehalfOf(ex:Tutors, ex:TealTeam, -)
+ 
+wasAttributedTo(ex:SurveyDraft, ex:Qualtrics)
+ 
+actedOnBehalfOf(ex:Alice, ex:TealTeam)
+actedOnBehalfOf(ex:Brian, ex:TealTeam)
+actedOnBehalfOf(ex:Carl, ex:TealTeam)
+actedOnBehalfOf(ex:David, ex:TealTeam)
+ 
+/* 5.2 Process responsibility */
+wasAssociatedWith(ex:Research, ex:TealTeam, -)
+wasAssociatedWith(ex:SurveyDiscussion, ex:TealTeam, -)
+wasAssociatedWith(ex:PlayGovRole, ex:TealTeam, -)
+wasAssociatedWith(ex:CreateDocumentation, ex:Excel, -)
+wasAssociatedWith(ex:UserPersonas, ex:SurveyRespondents, -)
+wasAssociatedWith(ex:CreatePresentation, ex:PowerPoint, -)
+ 
+/* specialization */
+specializationOf(ex:Metadata, ex:Documentation)
+specializationOf(ex:Attributes, ex:Documentation)
+specializationOf(ex:BasicPROVDiagram, ex:Presentation)
+specializationOf(ex:FinalIndex, ex:Presentation)
+ 
+/* 5.3 Dataflow (used) */
+used(ex:Research, ex:Topic, -)
+used(ex:Research, ex:Internet, -)
+ 
+used(ex:SurveyDiscussion, ex:SurveyDraft, -)
+used(ex:PostingUploading, ex:FinalSurvey, -)
+used(ex:CreateDocumentation, ex:FinalSurvey, -)
+ 
+used(ex:PreprocessData, ex:RawData, -)
+used(ex:IndexDiscussion, ex:Documentation, -)
+ 
+used(ex:DataStandardisation, ex:CleanedData, -)
+used(ex:CreateIndexFormula, ex:StandardisedData, -)
+used(ex:IndexDiscussion, ex:BasicIndex, -)
+used(ex:CreateIndexFormula, ex:BasicIndex, -)
+ 
+/* 5.3 Generation */
+wasGeneratedBy(ex:SurveyDraft, ex:SurveyDiscussion, -)
+wasGeneratedBy(ex:SurveyResponse, ex:PostingUploading, -)
+wasGeneratedBy(ex:Documentation, ex:CreateDocumentation, -)
+wasGeneratedBy(ex:SurveyDraft, ex:PlayGovRole, -)
+wasGeneratedBy(ex:CleanedData, ex:PreprocessData, -)
+wasGeneratedBy(ex:StandardisedData, ex:DataStandardisation, -)
+wasGeneratedBy(ex:BasicIndex, ex:IndexDiscussion, -)
+wasGeneratedBy(ex:FinalIndex, ex:CreateIndexFormula, -)
+wasGeneratedBy(ex:Presentation, ex:CreatePresentation, -)
+wasGeneratedBy(ex:BasicPROVDiagram, ex:CreateBasicPROVDiagram, -)
+wasGeneratedBy(ex:SurveyResponse, ex:CompleteSurvey, -)
+ 
+/* 5.4 Derivations */
+wasDerivedFrom(ex:SurveyResponse, ex:RawData)
+wasDerivedFrom(ex:FinalSurvey, ex:SurveyDraft)
+wasDerivedFrom(ex:Attributes, ex:FinalSurvey)
+wasDerivedFrom(ex:Metadata, ex:FinalSurvey)
+ 
+/* Inform relations */
+wasInformedBy(ex:SurveyDiscussion, ex:PlayGovRole)
+wasInformedBy(ex:PlayGovRole, ex:SurveyDiscussion)
+wasInformedBy(ex:UserPersonas, ex:CompleteSurvey)
+wasInformedBy(ex:IndexDiscussion, ex:PreprocessData)
+wasInformedBy(ex:ResearchIndexIndicators, ex:IndexDiscussion)
+wasInformedBy(ex:CreatePresentation, ex:ResearchIndexIndicators)
+wasInformedBy(ex:CreatePresentation, ex:IndexDiscussion)
+ 
+endDocument
